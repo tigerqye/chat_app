@@ -2,39 +2,105 @@
 (function (process){(function (){
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
 var sendButton = document.getElementById("publish");
 var inputField = document.getElementById("input-field");
+var join = document.getElementById("join-channel");
+var nameField = document.getElementById("name");
+var channelCode = document.getElementById("channel-field");
+var chat = document.getElementById("chat");
+var username;
+var code;
+var lastChannel = 'default';
 
 require('dotenv').config();
 
-console.log(process && process.env && process.env.ABLY_KEY || "4G06rA.8YIqxA:oMQW-7Pq9oJtd1q9");
-var ably = new Ably.Realtime(process && process.env && process.env.ABLY_KEY || "4G06rA.8YIqxA:oMQW-7Pq9oJtd1q9");
-ably.connection.on('connected', function () {
-  alert("That was simple, you're now connected to Ably in realtime");
+var ably = new Ably.Realtime({
+  key: process && process.env && process.env.ABLY_KEY || "4G06rA.8YIqxA:oMQW-7Pq9oJtd1q9",
+  echoMessages: false
 });
-var channel = ably.channels.get('quickstart');
+var channel = ably.channels.get('default');
 channel.subscribe('greeting', function (message) {
-  show(message.data);
-}); //Add an event listener to check when the send button is clicked
+  show(message.data.message, message.data.name);
+});
 
-sendButton.addEventListener('click', function () {
-  var input = inputField.value;
-  inputField.value = ""; //send message
+var message_data = function message_data(name, message) {
+  (0, _classCallCheck2["default"])(this, message_data);
+  this.name = name;
+  this.message = message;
+}; //Add an event listener to check when the send button is clicked
 
-  channel.publish('greeting', input);
+
+var sendMessage = function sendMessage() {
+  var input = new message_data(username, inputField.value);
+  inputField.value = "";
+
+  if (input != "") {
+    show(input.message, input.name, 'send'); //send message
+
+    channel.publish('greeting', input);
+  }
+};
+
+sendButton.addEventListener('click', sendMessage);
+inputField.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    sendMessage();
+  }
+});
+join.addEventListener('click', function () {
+  username = nameField.value;
+  code = channelCode.value;
+  console.log(code);
+
+  if (code.replace(/\s/g, '') != "" && username.replace(/\s/g, '') != "") {
+    if (code != "default" && lastChannel != code) {
+      channel.unsubscribe(lastChannel);
+      channel = ably.channels.get(code);
+      channel.subscribe('greeting', function (message) {
+        show(message.data.message, message.data.name);
+      });
+      lastChannel = code;
+    }
+
+    chat.style.display = "initial";
+  } else {
+    alert("Please Fill In The Values");
+  }
 }); //This method displays the message.
 
-function show(text) {
-  var messageType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "receive";
-  var messageItem = "<li class=\"message ".concat(messageType === "send" ? "sent-message" : "", "\">\n        <div class=\"message-info\"> \n            <p class=\"message-text\">").concat(text, "</p>\n        </div> \n    </li>"); // const messageItem = `<li class="message">${text}<span class="message-time"> ${time}</span></li`;
+function show(text, sender) {
+  var messageType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'receive';
+  var messageItem = "<div class=\"message-name\">".concat(sender, "</div>\n    <li class=\"message ").concat(messageType === "send" ? "sent-message" : "recieved-message", "\">\n        <div class=\"message-info\"> \n            <p class=\"message-text\">").concat(text, "</p>\n        </div> \n    </li>"); // const messageItem = `<li class="message">${text}<span class="message-time"> ${time}</span></li`;
 
   $('#channel-status').append(messageItem);
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":6,"dotenv":3}],2:[function(require,module,exports){
+},{"@babel/runtime/helpers/classCallCheck":2,"@babel/runtime/helpers/interopRequireDefault":3,"_process":8,"dotenv":5}],2:[function(require,module,exports){
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
 
+module.exports = _classCallCheck;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
 },{}],3:[function(require,module,exports){
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    "default": obj
+  };
+}
+
+module.exports = _interopRequireDefault;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+},{}],4:[function(require,module,exports){
+
+},{}],5:[function(require,module,exports){
 (function (process){(function (){
 /* @flow */
 /*::
@@ -156,7 +222,7 @@ module.exports.config = config
 module.exports.parse = parse
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":6,"fs":2,"os":4,"path":5}],4:[function(require,module,exports){
+},{"_process":8,"fs":4,"os":6,"path":7}],6:[function(require,module,exports){
 exports.endianness = function () { return 'LE' };
 
 exports.hostname = function () {
@@ -207,7 +273,7 @@ exports.homedir = function () {
 	return '/'
 };
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (process){(function (){
 // 'path' module extracted from Node.js v8.11.1 (only the posix part)
 // transplited with Babel
@@ -740,7 +806,7 @@ posix.posix = posix;
 module.exports = posix;
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":6}],6:[function(require,module,exports){
+},{"_process":8}],8:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

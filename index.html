@@ -10,7 +10,14 @@
     <body>
         <!--The chat app container-->
         <div class="chat-container">
-            <div class="chat">
+            <div class="top-container">
+                <span>Name</span>
+                <input type="text" class="channel-input" id="name"/>
+                <span>Channel</span>
+                <input type="text" class="channel-input" id="channel-field" value="default"/>
+                <input id="join-channel" class="input-button" type="submit" value=">">
+            </div>
+            <div class="chat" id="chat">
 
                 <!--Message container - the chat messages will appear here-->
                 <ul class="row message-container" id="channel-status" ></ul>
