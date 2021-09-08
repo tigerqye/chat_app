@@ -74,5 +74,7 @@ function show(text, sender, messageType='receive') {
         </div> 
     </li>`
     // const messageItem = `<li class="message">${text}<span class="message-time"> ${time}</span></li`;
-    $('#channel-status').append(messageItem)
+    $('#channel-status').append(messageItem);
+    var lastMessage = document.querySelectorAll(".message:last-child");
+    lastMessage[0].scrollIntoView();
 }

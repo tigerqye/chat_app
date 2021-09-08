@@ -77,6 +77,9 @@ function show(text, sender) {
   var messageItem = "<div class=\"message-name\">".concat(sender, "</div>\n    <li class=\"message ").concat(messageType === "send" ? "sent-message" : "recieved-message", "\">\n        <div class=\"message-info\"> \n            <p class=\"message-text\">").concat(text, "</p>\n        </div> \n    </li>"); // const messageItem = `<li class="message">${text}<span class="message-time"> ${time}</span></li`;
 
   $('#channel-status').append(messageItem);
+  var lastMessage = document.querySelectorAll(".message:last-child");
+  console.log(lastMessage);
+  lastMessage[0].scrollIntoView();
 }
 
 }).call(this)}).call(this,require('_process'))
