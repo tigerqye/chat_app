@@ -83,6 +83,8 @@ body {
     height: 300px;
     overflow-y: scroll;
     list-style-type: none;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
 }
 .message-time {
     float: right;
