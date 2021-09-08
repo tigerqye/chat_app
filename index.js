@@ -6,13 +6,12 @@ const channelCode = document.getElementById("channel-field");
 const chat = document.getElementById("chat");
 var username;
 var code;
-var lastChannel = 'default';
 require('dotenv').config();
 
 var ably = new Ably.Realtime({ key : process.env.ABLY_KEY, echoMessages : false });
 
 var channel = ably.channels.get('default');
-channel.subscribe('greeting', function(message) {
+channel.subscribe('message', function(message) {
   show(message.data.message, message.data.name);
 });
 
@@ -32,7 +31,7 @@ var sendMessage = function () {
         show(input.message, input.name, 'send');
 
         //send message
-        channel.publish('greeting', input);
+        channel.publish('message', input);
     } 
 };
 
@@ -49,14 +48,13 @@ join.addEventListener('click', function() {
     console.log(code);
     if(code.replace(/\s/g, '') != "" && username.replace(/\s/g, '') != "")
     {
-        if(code != "default" && lastChannel != code)
+        if(code != "default")
         {
-            channel.unsubscribe(lastChannel);
+            channel.unsubscribe();
             channel = ably.channels.get(code);
-            channel.subscribe('greeting', function(message) {
+            channel.subscribe('message', function(message) {
                 show(message.data.message, message.data.name);
             });
-            lastChannel = code;
         }
         chat.style.display = "initial";
     }
