@@ -38,6 +38,12 @@ body {
     padding: 20px;
     border-radius: 0 0 5px 5px;
 }
+.connection-container {
+    background-color: lightgreen;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px;
+}
 .text-input-container {
     background-color: #f2f2f2;
     border-radius: 10px;
@@ -99,15 +105,16 @@ body {
 .message-info {
     width: 65%;
  }
-.message-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
 .message-name {
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 10px;
+}
+.message-connection {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 10px;
+    text-align: center;
 }
 .message-text {
     margin-left: 8px;

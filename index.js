@@ -4,6 +4,7 @@ const join = document.getElementById("join-channel");
 const nameField = document.getElementById("name");
 const channelCode = document.getElementById("channel-field");
 const chat = document.getElementById("chat");
+const connection = document.getElementById("connection");
 var username;
 var code;
 require('dotenv').config();
@@ -26,7 +27,7 @@ class message_data {
 var sendMessage = function () {
     let input = new message_data(username, inputField.value);
     inputField.value = "";
-    if(input != "")
+    if(input.message.replace(/\s/g, '') != "")
     {
         show(input.message, input.name, 'send');
 
@@ -48,15 +49,18 @@ join.addEventListener('click', function() {
     console.log(code);
     if(code.replace(/\s/g, '') != "" && username.replace(/\s/g, '') != "")
     {
-        if(code != "default")
-        {
-            channel.unsubscribe();
-            channel = ably.channels.get(code);
-            channel.subscribe('message', function(message) {
-                show(message.data.message, message.data.name);
-            });
-        }
+        channel.unsubscribe();
+        channel = ably.channels.get(code);
+        channel.subscribe('message', function(message) {
+            show(message.data.message, message.data.name);
+        });
         chat.style.display = "initial";
+        connection.innerHTML = "Connected to: " + code;
+        const messageItem = `<div class="message-connection">Channel: ${code}</div>`
+        // const messageItem = `<li class="message">${text}<span class="message-time"> ${time}</span></li`;
+        $('#channel-status').append(messageItem);
+        var lastMessage = document.querySelectorAll(".message-connection:last-child");
+        lastMessage[0].scrollIntoView();
     }
     else {
         alert("Please Fill In The Values");
