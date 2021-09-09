@@ -49,6 +49,7 @@ join.addEventListener('click', function() {
     console.log(code);
     if(code.replace(/\s/g, '') != "" && username.replace(/\s/g, '') != "")
     {
+        nameField.disabled = true;
         channel.unsubscribe();
         channel = ably.channels.get(code);
         channel.subscribe('message', function(message) {
