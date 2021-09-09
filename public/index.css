@@ -55,7 +55,7 @@ body {
 }
 .channel-input {
     background-color: #f2f2f2;
-    width: 100px;
+    width: 127px;
     height: 32px;
     border: 0;
     border-radius: 10px;
@@ -74,11 +74,9 @@ body {
     transition: 500ms;
     font-weight: 700;
 }
-
 .input-button:hover {
     transform: translate(10px);
 }
-
 .message-container {
     height: 300px;
     overflow-y: scroll;
